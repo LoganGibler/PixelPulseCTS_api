@@ -1,0 +1,45 @@
+
+
+
+PixelPulse Labs Consolidating ticketing system.
+
+    Things to figure out:
+        attachments that arent just screenshots, where to store them externally? Firebase is likely.
+
+    
+    DB schemas:
+        usertable:
+            ID 
+            Name 
+            [Team or Teams]
+            role ?
+            email
+            Office phone
+            Pager phone
+
+
+        Ticket Schemas:
+                Maybe a different table per ticket type???                                                           
+                What about having multiple teams per ticket? have an input box like original CTS?
+            ticketID
+            type: event, incident, service request, change, maintenance
+            title
+            description
+            priority: 1-4
+            date created
+            date last edited
+            status: Open, In Progress, Closed, resolved, waiting for 3rd party, waiting for approval
+            approved: true/false (only if change ticket will this matter)
+            assignedTeam
+            submitter
+            implementation date range
+            assignedTo
+            auditString, aka "sent to supply chain 01/02/2024 12:05pm, sent to FTE team 1:10pm, ticket changed to active 1:15pm" 
+
+
+        01/22/2024-
+            Drawing out DB schemas
+            starting DB querys
+            Email => ticket created - using autoforwarding to a 3rd party vendor, that fowards to api for ticket creation.
+
+
