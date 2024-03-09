@@ -332,6 +332,19 @@ exports.getTicketByTicketNumber = async (req, res) => {
 exports.updateTicket = async (req, res) => {
   const ticketValues = req.body.ticketValues;
 
+  // console.log("BEFORE UTC CONVERSION", ticketValues.implementationStart);
+  // console.log("BEFORE UTC CONVERSION", ticketValues.implementationEnd);
+
+  const implementationStartUTC = new Date(
+    ticketValues.implementationStart
+  ).toISOString();
+  const implementationEndUTC = new Date(
+    ticketValues.implementationEnd
+  ).toISOString();
+
+  // console.log(implementationStartUTC, "HERE IS THE END DATE");
+  // console.log(implementationEndUTC, "HERE IS THE START DATE");
+
   try {
     const filter = { ticketNumber: ticketValues.ticketNumber };
     if (filter === null || undefined) {
@@ -356,8 +369,8 @@ exports.updateTicket = async (req, res) => {
       involvedTeams: ticketValues.involvedTeams,
       team: ticketValues.team,
       submitter: ticketValues.submitter,
-      implementationStart: ticketValues.implementationStart,
-      implementationEnd: ticketValues.implementationEnd,
+      implementationStart: implementationStartUTC,
+      implementationEnd: implementationEndUTC,
       completeBy: ticketValues.completeBy,
       auditString: ticketValues.auditString,
       paging: ticketValues.paging,
