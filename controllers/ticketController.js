@@ -404,11 +404,11 @@ exports.updateTicket = async (req, res) => {
       await Tickets.updateOne(filter, update);
     }
 
-    if (oldData.assignedTeam !== ticketValues.assignedTeam) {
+    if (oldData.team !== ticketValues.team) {
       const update = {
         $push: {
           auditString: [
-            `AssignedTeam was updated by ${req.body.user}, changed from ${oldData.assignedTeam} to ${ticketValues.assignedTeam}`,
+            `AssignedTeam was updated by ${req.body.user}, changed from ${oldData.team} to ${ticketValues.team}`,
             formatDate(),
           ],
         },
