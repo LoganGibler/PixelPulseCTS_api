@@ -1,26 +1,27 @@
 const express = require("express");
 const userController = require("../controllers/userController");
-
+const authenticate = require("../authMiddleware");
 const router = express.Router();
 
-router.post("/createUser", userController.createUser);
+router.post("/createUser", authenticate, userController.createUser);
 router.post("/loginUser", userController.loginUser);
 
-router.delete("/deleteUser", userController.deleteUser);
+router.delete("/deleteUser", authenticate, userController.deleteUser);
 
-router.get("/getAllUsers", userController.getAllUsers);
-router.get("/getUsersById", userController.getUsersById);
-router.get("/getUsersByTeam", userController.getUsersByTeam);
-router.get("/getUsersByRole", userController.getUsersByRole);
-router.get("/getUsersByEmail", userController.getUsersByEmail);
-router.get("/getUsersByName", userController.getUsersByName);
-router.get("/getAllUsersAdmin", userController.getAllUsersAdmin);
+router.get("/getAllUsers", authenticate, userController.getAllUsers);
+router.get("/getUsersById", authenticate, userController.getUsersById);
+router.get("/getUsersByTeam", authenticate, userController.getUsersByTeam);
+router.get("/getUsersByRole", authenticate, userController.getUsersByRole);
+router.get("/getUsersByEmail", authenticate, userController.getUsersByEmail);
+router.get("/getUsersByName", authenticate, userController.getUsersByName);
+router.get("/getAllUsersAdmin", authenticate, userController.getAllUsersAdmin);
 
-router.post("/updateUserName", userController.updateUserName);
-router.post("/updateUserEmail", userController.updateUserEmail);
-router.post("/updateUserPager", userController.updatePagerById);
-router.post("/updateUserPhone", userController.updatePhoneById);
-router.post("/updateUserTeam", userController.updateTeamById);
-router.post("/updateUserRole", userController.updateRoleById);
+router.post("/updateUserName", authenticate, userController.updateUserName);
+router.post("/updateUserEmail", authenticate, userController.updateUserEmail);
+router.post("/updateUserPager", authenticate, userController.updatePagerById);
+router.post("/updateUserPhone", authenticate, userController.updatePhoneById);
+router.post("/updateUserTeam", authenticate, userController.updateTeamById);
+router.post("/updateUserRole", authenticate, userController.updateRoleById);
 
+router.post("/searchUsers", userController.searchUsers);
 module.exports = router;

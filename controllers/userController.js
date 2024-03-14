@@ -330,3 +330,34 @@ exports.updateRoleById = async (req, res) => {
     res.status(500).json({ message: "failed to update user status." });
   }
 };
+
+exports.searchUsers = async (req, res) => {
+  try {
+    const search = req.body.search;
+    console.log("Here is the search: ", search);
+
+    const regex = new RegExp(search, "i");
+    // console.log("Here is regex:", typeof regex.toString());
+
+    const filter = {
+      $or: [
+        { name: { $regex: regex } },
+        { email: { $regex: regex } },
+        { role: { $elemMatch: { $regex: regex } } },
+        { team: { $elemMatch: { $regex: regex } } },
+
+        { officePhone: { $regex: regex } },
+        { pagerPhone: { $regex: regex } },
+      ],
+    };
+
+    const foundUsers = await User.find(filter);
+    console.log("Here are found users: ", foundUsers);
+    foundUsers
+      ? res.status(200).json({ foundUsers })
+      : res.status(300).json({ message: "No users found." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "failed to search users." });
+  }
+};
