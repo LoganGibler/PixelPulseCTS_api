@@ -6,6 +6,7 @@ const ticketRoutes = require("./routes/ticketRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const companyInfoRoutes = require("./routes/companyInfoRoutes");
 const taskRoutes = require("./routes/taskRoutes");
+const teamInfoRoutes = require("./routes/teamInfoRoutes");
 const cors = require("cors");
 
 require("dotenv").config();
@@ -34,6 +35,7 @@ app.use("/ticket", ticketRoutes);
 app.use("/comment", commentRoutes);
 app.use("/companyInfo", companyInfoRoutes);
 app.use("/task", taskRoutes);
+app.use("/teamInfo", teamInfoRoutes);
 
 mongoose
   .connect(process.env.db_url_qa)

@@ -2,6 +2,7 @@ const User = require("../db/userSchema");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const TeamInfo = require("../db/teamInfoSchema");
 // const { default: mongoose } = require("mongoose");
 
 exports.testAuth = async (req, res) => {
@@ -352,12 +353,43 @@ exports.searchUsers = async (req, res) => {
     };
 
     const foundUsers = await User.find(filter);
-    console.log("Here are found users: ", foundUsers);
+    // console.log("Here are found users: ", foundUsers);
     foundUsers
       ? res.status(200).json({ foundUsers })
       : res.status(300).json({ message: "No users found." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "failed to search users." });
+  }
+};
+
+exports.getUsersTeams = async (req, res) => {
+  try {
+    const teamData = [];
+    const teams = req.body.teams;
+    console.log("Here is user teams:", teams);
+    for (let i = 0; i < teams.length; i++) {
+      const filter = { teamName: teams[i] };
+      const teamInfo = await TeamInfo.findOne(filter);
+      teamData.push(teamInfo);
+      console.log(teamData);
+    }
+
+    res.status(200).json({ teamData });
+  } catch (error) {
+    res.status(500).json({ message: "failed to get users teams." });
+  }
+};
+
+exports.getTeamMembers = async (req, res) => {
+  try {
+    const team = req.body.team;
+    const teamMembers = await User.find({ team: team }).select({
+      __v: 0,
+      password: 0,
+    });
+    res.status(200).json({ teamMembers });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to get team members." });
   }
 };
