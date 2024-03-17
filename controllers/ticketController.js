@@ -32,6 +32,7 @@ exports.createTicket = async (req, res) => {
 
     const checkTickets = await Tickets.findOne({ ticketNumber: ticketNumber });
 
+    console.log(req.body);
     if (checkTickets === null) {
       const createdTicket = await Tickets.create({
         ticketNumber: ticketNumber,

@@ -22,6 +22,7 @@ exports.testAuth = async (req, res) => {
 // Create user
 exports.createUser = async (req, res) => {
   try {
+    console.log(req.body)
     const userCheck = await User.find({ name: req.body.name });
     if (userCheck[0] !== undefined) {
       return res.status(400).json({ message: "user already exists." });
