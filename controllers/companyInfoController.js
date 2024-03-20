@@ -6,8 +6,6 @@ exports.addCompanyTeam = async (req, res) => {
       $push: { teams: req.body.team },
     });
 
-  
-
     newTeam ? res.status(200).json({ message: "New team added." }) : null;
   } catch (error) {
     res
@@ -22,8 +20,6 @@ exports.addCompany = async (req, res) => {
       companyID: req.body.companyID,
       teams: [],
     });
-
-    
 
     newCompany ? res.status(200).json({ message: "newCompany added." }) : null;
   } catch (error) {
