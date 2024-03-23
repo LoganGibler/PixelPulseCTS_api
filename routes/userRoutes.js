@@ -3,7 +3,7 @@ const userController = require("../controllers/userController");
 const authenticate = require("../authMiddleware");
 const router = express.Router();
 
-router.post("/createUser",  userController.createUser);
+router.post("/createUser", userController.createUser);
 router.post("/loginUser", userController.loginUser);
 
 router.delete("/deleteUser", authenticate, userController.deleteUser);
@@ -27,4 +27,6 @@ router.post("/updateUserRole", authenticate, userController.updateRoleById);
 router.post("/searchUsers", userController.searchUsers);
 router.post("/getUsersTeams", authenticate, userController.getUsersTeams);
 router.post("/getTeamMembers", authenticate, userController.getTeamMembers);
+
+router.post("/resetPassword", userController.resetPassword);
 module.exports = router;

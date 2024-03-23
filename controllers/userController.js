@@ -22,7 +22,7 @@ exports.testAuth = async (req, res) => {
 // Create user
 exports.createUser = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     const userCheck = await User.find({ name: req.body.name });
     if (userCheck[0] !== undefined) {
       return res.status(400).json({ message: "user already exists." });
@@ -392,5 +392,26 @@ exports.getTeamMembers = async (req, res) => {
     res.status(200).json({ teamMembers });
   } catch (error) {
     res.status(500).json({ message: "Failed to get team members." });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    console.log(req.body.email);
+    console.log(req.body.password);
+
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
+    console.log(hashedPassword);
+    const filter = { email: req.body.email };
+    const update = { password: hashedPassword };
+    const newPass = await User.updateOne(filter, update);
+    console.log(newPass);
+    newPass
+      ? res.status(200).json({ newPass })
+      : res.status(400).json({ error: "Password not updated" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to reset password." });
   }
 };
