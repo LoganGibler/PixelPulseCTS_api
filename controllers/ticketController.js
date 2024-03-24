@@ -1,11 +1,14 @@
 const Tickets = require("../db/ticketSchema");
 const CompanyInfo = require("../db/companyInfoSchema");
+const TeamInfo = require("../db/teamInfoSchema");
+const User = require("../db/userSchema");
 var currentDate = new Date();
 var day = currentDate.getDate();
 var month = currentDate.getMonth() + 1;
 var year = currentDate.getFullYear();
 var hours = currentDate.getHours();
 const moment = require("moment");
+const sendEmail = require("../mailer");
 const minutes =
   currentDate.getMinutes() < 10
     ? "0" + currentDate.getMinutes()
@@ -333,18 +336,12 @@ exports.getTicketByTicketNumber = async (req, res) => {
 exports.updateTicket = async (req, res) => {
   const ticketValues = req.body.ticketValues;
 
-  // console.log("BEFORE UTC CONVERSION", ticketValues.implementationStart);
-  // console.log("BEFORE UTC CONVERSION", ticketValues.implementationEnd);
-
   const implementationStartUTC = new Date(
     ticketValues.implementationStart
   ).toISOString();
   const implementationEndUTC = new Date(
     ticketValues.implementationEnd
   ).toISOString();
-
-  // console.log(implementationStartUTC, "HERE IS THE END DATE");
-  // console.log(implementationEndUTC, "HERE IS THE START DATE");
 
   try {
     const filter = { ticketNumber: ticketValues.ticketNumber };
@@ -355,7 +352,6 @@ exports.updateTicket = async (req, res) => {
     }
 
     const oldData = await Tickets.findOne(filter);
-    // console.log("HERE IS OLD DATA:", oldData);
 
     const update = {
       title: ticketValues.title,
@@ -415,6 +411,19 @@ exports.updateTicket = async (req, res) => {
         },
       };
       await Tickets.updateOne(filter, update);
+      // get new team email, send email with notifcation that ticket has been assigned to them.
+      //  should do the same thing with involved teams.
+      const emailFilter = { teamName: ticketValues.team };
+      const teamData = await TeamInfo.findOne(emailFilter);
+      const teamEmail = teamData.teamEmail;
+      const subject =
+        "Your Team has been assigned to " +
+        ticketValues.type +
+        "  #" +
+        oldData.ticketNumberString;
+      const body = `${ticketValues.type} #${oldData.ticketNumberString} has been assigned to your team. Please review the ticket and take the necessary actions.`;
+      // change the below in prod to actual team email. This is just to show it works.
+      await sendEmail("Logan.Gibler@pixelpulselabs.tech", subject, body);
     }
 
     if (oldData.assignedPerson !== ticketValues.assignedPerson) {
@@ -427,6 +436,13 @@ exports.updateTicket = async (req, res) => {
         },
       };
       await Tickets.updateOne(filter, update);
+      const userData = await User.findOne({
+        name: ticketValues.assignedPerson,
+      });
+      const userEmail = userData.email;
+      const subject = `You have been assigned to ${ticketValues.type} #${oldData.ticketNumberString}`;
+      const body = `You have been assigned to ${ticketValues.type} #${oldData.ticketNumberString}. Please review the ticket and take the necessary actions.`;
+      sendEmail("Logan.Gibler@pixelpulselabs.tech", subject, body);
     }
 
     if (oldData.description !== ticketValues.description) {

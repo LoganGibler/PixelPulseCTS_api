@@ -16,9 +16,6 @@ oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 const email = "pixelpulsects@pixelpulselabs.tech";
 
-// Set up transporter using email and app password
-
-// Function to send email
 async function sendEmail(toEmail, subject, text) {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
@@ -50,17 +47,4 @@ async function sendEmail(toEmail, subject, text) {
   }
 }
 
-// Test sending email
-// sendEmail(
-//   "logan.gibler@pixelpulselabs.tech",
-//   "Test TESTING",
-//   "This is a test email from the server"
-// ).catch((err) => {
-//   console.error("Error sending test email:", err);
-// });
-
-sendEmail("Logan.Gibler@pixelpulselabs.tech", "This is subject", "This is body of email.").then((result) => {
-  console.log(result);
-}).catch((err) => {
-  console.log(err);
-});
+module.exports = sendEmail;

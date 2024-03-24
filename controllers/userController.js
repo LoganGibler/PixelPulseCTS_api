@@ -3,6 +3,7 @@ require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const TeamInfo = require("../db/teamInfoSchema");
+const sendEmail = require("../mailer");
 // const { default: mongoose } = require("mongoose");
 
 exports.testAuth = async (req, res) => {
@@ -39,6 +40,18 @@ exports.createUser = async (req, res) => {
         officePhone: req.body.officePhone,
         pagerPhone: req.body.pagerPhone,
       });
+
+      user
+        ? sendEmail(
+            user.email,
+            "Welcome to Pixel Pulse",
+            "Welcome! Your temporary password is: " +
+              process.env.defaultPass +
+              "\n" +
+              "You will be asked to create a new password once you log in with this temporary password. \n Your new password must be at least 7 characters long, contain a special character, number, and uppercase letter."
+          )
+        : null;
+
       user
         ? res.status(200).json({ message: "User sucessfully created", user })
         : res.status(400).json({ message: "failed to create user" });
