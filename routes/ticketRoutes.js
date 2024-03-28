@@ -3,7 +3,7 @@ const ticketController = require("../controllers/ticketController");
 const authenticate = require("../authMiddleware");
 const router = express.Router();
 
-router.post("/createTicket", ticketController.createTicket);
+router.post("/createTicket", authenticate, ticketController.createTicket);
 router.post(
   "/getTicketsByTeamsAndDate",
   authenticate,
