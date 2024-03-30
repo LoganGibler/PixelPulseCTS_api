@@ -41,9 +41,10 @@ exports.createUser = async (req, res) => {
         pagerPhone: req.body.pagerPhone,
       });
 
+      // pass in user.email when in prod, this email is hard coded to show just an example
       user
         ? sendEmail(
-            user.email,
+            "Logan.Gibler@pixelpulselabs.tech",
             "Welcome to Pixel Pulse",
             "Welcome! Your temporary password is: " +
               process.env.defaultPass +

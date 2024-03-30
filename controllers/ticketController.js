@@ -423,7 +423,8 @@ exports.updateTicket = async (req, res) => {
         oldData.ticketNumberString;
       const body = `${ticketValues.type} #${oldData.ticketNumberString} has been assigned to your team. Please review the ticket and take the necessary actions.`;
       // change the below in prod to actual team email. This is just to show it works.
-      await sendEmail("Logan.Gibler@pixelpulselabs.tech", subject, body);
+      await sendEmail("logan.gibler@pixelpulselabs.tech", subject, body);
+      // await sendEmail("Logan.Gibler@gmail.com", subject, body);
     }
 
     if (oldData.assignedPerson !== ticketValues.assignedPerson) {
@@ -442,7 +443,8 @@ exports.updateTicket = async (req, res) => {
       const userEmail = userData.email;
       const subject = `You have been assigned to ${ticketValues.type} #${oldData.ticketNumberString}`;
       const body = `You have been assigned to ${ticketValues.type} #${oldData.ticketNumberString}. Please review the ticket and take the necessary actions.`;
-      sendEmail("Logan.Gibler@pixelpulselabs.tech", subject, body);
+      await sendEmail("logan.gibler@pixelpulselabs.tech", subject, body);
+      // await sendEmail("Logan.Gibler@pixelpulselabs.tech", subject, body);
     }
 
     if (oldData.description !== ticketValues.description) {
