@@ -8,6 +8,8 @@ const companyInfoRoutes = require("./routes/companyInfoRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const teamInfoRoutes = require("./routes/teamInfoRoutes");
 const cors = require("cors");
+const fetchEmails = require("./fetchEmails");
+const cron = require("node-cron");
 
 require("dotenv").config();
 
@@ -37,6 +39,14 @@ app.use("/companyInfo", companyInfoRoutes);
 app.use("/task", taskRoutes);
 app.use("/teamInfo", teamInfoRoutes);
 // adding comment to test ssh key for laptop
+
+cron.schedule("*/20 * * * * *", async () => {
+  try {
+    await fetchEmails();
+  } catch (error) {
+    console.error("Error in cron job:", error);
+  }
+});
 
 mongoose
   .connect(process.env.db_url_qa)
